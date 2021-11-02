@@ -1,0 +1,11 @@
+.vs
+Library
+Logs
+obj
+Packages
+ProjectSettings
+UserSettings
+.collabignore
+.vsconfig
+Assembly-CSharp.csproj
+Glitch Jumper.sln
