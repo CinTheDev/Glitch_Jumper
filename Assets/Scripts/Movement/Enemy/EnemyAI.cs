@@ -75,7 +75,13 @@ public class EnemyAI : MonoBehaviour
 
             // Apply knockback on player
             Rigidbody2D plRb = player.GetComponent<Rigidbody2D>();
-            plRb.velocity = new Vector2(direction, Mathf.Abs(direction));
+            plRb.velocity = new Vector2(direction, Mathf.Abs(direction)) * Mathf.Sqrt(plRb.gravityScale);
+
+            // Add friction so the player doesn't slide around
+            PhysicsMaterial2D mat = new PhysicsMaterial2D(plRb.sharedMaterial.name);
+            mat.friction = 0.4f;
+            plRb.sharedMaterial = mat;
+
             Debug.Log("Killed player");
         }
         // Kill enemy
@@ -85,9 +91,9 @@ public class EnemyAI : MonoBehaviour
             state = AIState.Stop;
             // Apply knockback on player
             Rigidbody2D plRb = player.GetComponent<Rigidbody2D>();
-            plRb.velocity = new Vector2(plRb.velocity.x * -.5f, plRb.velocity.y);
+            plRb.velocity = new Vector2(plRb.velocity.x * -.5f, plRb.velocity.y) * Mathf.Sqrt(plRb.gravityScale);
 
-            rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * punchForce2, rb.velocity.y);
+            rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * punchForce2, rb.velocity.y) * Mathf.Sqrt(rb.gravityScale);
 
             Debug.Log("Got hit by player");
         }
