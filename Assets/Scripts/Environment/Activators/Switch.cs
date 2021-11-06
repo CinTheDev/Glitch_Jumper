@@ -3,15 +3,20 @@ using System.Linq;
 
 public class Switch : MonoBehaviour
 {
+    public bool spriteInverted;
     // Array of Objects that can trigger the switch
     public GameObject[] triggerObjects;
     // Array of Objects that are triggered when switch is triggered
     public ActivationClass[] activationObjects;
 
-    public Color debugActiveColor;
-    public Color debugUnactiveColor;
-
     public bool active;
+
+    private Animator animator;
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     private void Start()
     {
@@ -35,8 +40,8 @@ public class Switch : MonoBehaviour
         // If switch was set to active
         if (active)
         {
-            Debug.Log("Switch active");
-            GetComponent<SpriteRenderer>().color = debugActiveColor;
+            //Debug.Log("Switch active");
+            animator.SetBool("Active", !spriteInverted);
             foreach (ActivationClass a in activationObjects)
             {
                 a.Activate();
@@ -45,8 +50,8 @@ public class Switch : MonoBehaviour
         // If switch was set to not active
         else
         {
-            Debug.Log("Switch unactive");
-            GetComponent<SpriteRenderer>().color = debugUnactiveColor;
+            //Debug.Log("Switch unactive");
+            animator.SetBool("Active", spriteInverted);
             foreach (ActivationClass a in activationObjects)
             {
                 a.Deactivate();

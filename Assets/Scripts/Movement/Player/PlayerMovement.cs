@@ -5,24 +5,33 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody2D rb;
-    public float movementSpeed = 3;
-    public float jumpForce = 7;
-    public float dashForce = 10;
-    public bool isDead = false;
+    public float movementSpeed;
+    public float jumpHeight;
+    public float dashForce;
+    public bool isActive = true;
     public bool isDashing = false;
 
     Vector2 move;
-    float y;
     bool canDash = true;
-    int direction = 1; //-1 = left, 1 = right
+    int xdirection = 1;//-1 = left, 1 = right
+    int ydirection = 1;//-1 = down, 1 = up
+    
+    enum Direction
+    {
+        xdirection,
+        ydirection
+    }
+    Direction direction;
+
     void Start()
     {
+        Time.timeScale = 1f;
         rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
-        if (isDead)
+        if (!isActive)
         {
             return;
         }
@@ -37,17 +46,26 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             //transform.position = new Vector2(transform.position.x, y);
-            rb.velocity = new Vector2(rb.velocity.x , y);
+            if (direction == Direction.xdirection)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, 0);
+            }
+            else
+            {
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y);
+            }
+            
         }
 
         // If y velocity is 0...
-        if (Mathf.Abs(rb.velocity.y) < 0.0001f)
+        if (Mathf.Abs(rb.velocity.y) < 0.0001f && !isDashing)
         {
             // ...and jump button is pressed...
-            if (Input.GetButton("Jump"))
+            if (Input.GetButtonDown("Jump"))
             {
                 // ...jump!
-                rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+                float vel = Mathf.Sqrt(2 * rb.gravityScale * 9.81f * jumpHeight);
+                rb.velocity = new Vector2(rb.velocity.x, vel);
             }
             // Enable dash
             canDash = true;
@@ -55,17 +73,30 @@ public class PlayerMovement : MonoBehaviour
         // Determine direction
         if (Input.GetAxis("Horizontal") != 0)
         {
-            direction = (int)Mathf.Sign(Input.GetAxis("Horizontal"));
+            xdirection = (int)Mathf.Sign(Input.GetAxis("Horizontal"));
+            direction = Direction.xdirection;
         }
-        
+        if (Input.GetAxis("Vertical") != 0)
+        {
+            ydirection = (int)Mathf.Sign(Input.GetAxis("Vertical"));
+            direction = Direction.ydirection;
+        }
+
         // Dash
-        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
         {
             if (isDashing == false && canDash == true)
             {
-                y = transform.position.y;
-                StartCoroutine(Dash());
-                rb.velocity = new Vector2(direction * dashForce, 0);
+                if(direction == Direction.xdirection)
+                {
+                    StartCoroutine(Dash());
+                    rb.velocity = new Vector2(xdirection * (dashForce/0.2f), 0);
+                }
+                else
+                {
+                    StartCoroutine(Dash());
+                    rb.velocity = new Vector2(rb.velocity.x, ydirection * (dashForce/0.2f));
+                }
             } 
         }
     }
@@ -76,14 +107,21 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = new Vector2(0, 0.0002f);
         isDashing = false;
         canDash = false;
-        //StartCoroutine(Cooldown());
     }
 
-    // I don't like cooldown
-    /*private IEnumerator Cooldown()
+    public void Kill()
     {
-        canDash = false;
-        yield return new WaitForSeconds(1.5f);
-        canDash = true;
-    }*/
+        isActive = false;
+        PhysicsMaterial2D mat = new PhysicsMaterial2D(GetComponent<Rigidbody2D>().sharedMaterial.name);
+        mat.friction = 0.4f;
+        GetComponent<Rigidbody2D>().sharedMaterial = mat;
+    }
+
+    public IEnumerator Sleep(float s)
+    {
+        isActive = false;
+        rb.velocity = Vector2.zero;
+        yield return new WaitForSeconds(s);
+        isActive = true;
+    }
 }

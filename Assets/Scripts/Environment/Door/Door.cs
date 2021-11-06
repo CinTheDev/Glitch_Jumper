@@ -2,19 +2,25 @@ using UnityEngine;
 
 public class Door : ActivationClass
 {
-    public Color debugActiveColor;
-    public Color debugUnactiveColor;
+    public bool spriteInverted;
+    private Animator animator;
+
+    public void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+
     protected override void Act()
     {
-        Debug.Log("Door opened");
+        //Debug.Log("Door opened");
         GetComponent<BoxCollider2D>().enabled = false;
-        GetComponent<SpriteRenderer>().color = debugUnactiveColor;
+        animator.SetBool("Open", !spriteInverted);
     }
 
     protected override void Deact()
     {
-        Debug.Log("Door closed");
+        //Debug.Log("Door closed");
         GetComponent<BoxCollider2D>().enabled = true;
-        GetComponent<SpriteRenderer>().color = debugActiveColor;
+        animator.SetBool("Open", spriteInverted);
     }
 }

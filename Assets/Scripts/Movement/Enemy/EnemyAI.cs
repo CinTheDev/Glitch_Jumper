@@ -1,16 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
-    public Rigidbody2D rb;
-    public GameObject player;
     public float speed;
     public float stiffness;
     public float punchForce;
     public float punchForce2;
 
+    private Rigidbody2D rb;
+    private GameObject player;
     private Vector3 home;
     private enum AIState
     {
@@ -22,31 +20,24 @@ public class EnemyAI : MonoBehaviour
     private AIState state;
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
+        player = GameObject.FindGameObjectWithTag("Player");
+
         state = AIState.Idle;
         home = transform.position;
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    public void FixedUpdate()
     {
-        float move;
-        switch (state)
+        float move = state switch
         {
-            case AIState.Idle:
-                move = home.x - transform.position.x;
-                break;
-
-            case AIState.Follow:
-                move = player.transform.position.x - transform.position.x;
-                break;
-
-            default:
-                move = 0;
-                break;
-        }
-
+            AIState.Idle => home.x - transform.position.x,
+            AIState.Follow => player.transform.position.x - transform.position.x,
+            _ => 0,
+        };
         if (move != 0)
         {
             // Calculate speed with function f(x)
@@ -60,7 +51,7 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void OnCollisionEnter2D(Collision2D collision)
     {
         if (state == AIState.Stop) return;
 
@@ -69,7 +60,7 @@ public class EnemyAI : MonoBehaviour
         {
             // Mark player as dead
             state = AIState.Stop;
-            player.GetComponent<PlayerMovement>().isDead = true;
+            player.GetComponent<PlayerMovement>().Kill();
 
             float direction = Mathf.Sign(player.transform.position.x - transform.position.x) * punchForce;
 
@@ -78,11 +69,11 @@ public class EnemyAI : MonoBehaviour
             plRb.velocity = new Vector2(direction, Mathf.Abs(direction)) * Mathf.Sqrt(plRb.gravityScale);
 
             // Add friction so the player doesn't slide around
-            PhysicsMaterial2D mat = new PhysicsMaterial2D(plRb.sharedMaterial.name);
+            /*PhysicsMaterial2D mat = new PhysicsMaterial2D(plRb.sharedMaterial.name);
             mat.friction = 0.4f;
             plRb.sharedMaterial = mat;
-
-            Debug.Log("Killed player");
+            */
+            //Debug.Log("Killed player");
         }
         // Kill enemy
         else if (collision.gameObject == player && player.GetComponent<PlayerMovement>().isDashing)
@@ -95,7 +86,7 @@ public class EnemyAI : MonoBehaviour
 
             rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * punchForce2, rb.velocity.y) * Mathf.Sqrt(rb.gravityScale);
 
-            Debug.Log("Got hit by player");
+            //Debug.Log("Got hit by player");
         }
     }
 

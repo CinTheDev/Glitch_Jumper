@@ -4,13 +4,25 @@ using System.Linq;
 
 public class Button : MonoBehaviour
 {
+    public bool spriteInverted;
     // Array of Objects that can trigger the button
     public GameObject[] triggerObjects;
     // Array of Objects that are triggered when button is triggered
     public ActivationClass[] activationObjects;
 
     private bool active = false;
-    private List<GameObject> activeCollisions = new List<GameObject>();
+    private List<GameObject> activeCollisions;
+    private Animator animator;
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+
+    public void Start()
+    {
+        activeCollisions = new List<GameObject>();
+    }
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
@@ -28,6 +40,7 @@ public class Button : MonoBehaviour
                 a.Activate();
             }
 
+            animator.SetBool("Active", !spriteInverted);
             active = true;
         }
     }
@@ -47,6 +60,7 @@ public class Button : MonoBehaviour
                 a.Deactivate();
             }
 
+            animator.SetBool("Active", spriteInverted);
             active = false;
         }
     }
