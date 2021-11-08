@@ -16,6 +16,7 @@ public class TutorialEnd : MonoBehaviour
     {
         if (collision.gameObject == player.gameObject)
         {
+            StartCoroutine(player.GetComponent<PlayerMovement>().Sleep(1/4f));
             player.position = nextPosition;
             cam.index++;
         }

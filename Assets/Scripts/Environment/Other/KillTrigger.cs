@@ -2,13 +2,6 @@ using UnityEngine;
 
 public class KillTrigger : MonoBehaviour
 {
-    private GameObject player;
-
-    public void Start()
-    {
-        player = GameObject.FindGameObjectWithTag("Player");
-    }
-
     public enum Mode
     {
         OutOfBounds,
@@ -18,10 +11,11 @@ public class KillTrigger : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject == player)
+        Entity obj = collision.gameObject.GetComponent<Entity>();
+        if (obj)
         {
-            // Kill player
-            player.GetComponent<PlayerMovement>().Kill();
+            // Kill object
+            obj.Die(Entity.DieCause.KillTrigger);
         }
     }
 }

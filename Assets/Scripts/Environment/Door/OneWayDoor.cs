@@ -9,6 +9,7 @@ public class OneWayDoor : ActivationClass
     public GameObject[] passables;
 
     private bool active = true;
+    private Vector2 normal;
     private Animator animator;
 
     public void Awake()
@@ -17,23 +18,44 @@ public class OneWayDoor : ActivationClass
         GetComponent<SpriteRenderer>().flipX = direction != 1;
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
+    public void Start()
     {
-        // If collision is not a passable, do nothing
-        if (!passables.Contains(collision.gameObject) || !active) return;
+        float angle = transform.rotation.eulerAngles.z * Mathf.Deg2Rad;
+        float x = Mathf.Cos(angle) * direction;
+        float y = Mathf.Sin(angle) * direction;
+        normal = new Vector2(x, y);
+    }
 
-        int dir = (int)Mathf.Sign(transform.position.x - collision.transform.position.x);
-        if (dir == direction)
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        // If unpassable object or not active
+        if (!passables.Contains(collision.gameObject) || !active)
         {
-            GetComponent<BoxCollider2D>().isTrigger = true;
+            Block();
+        }
+
+        // If player is on the wrong side
+        if (Vector2.Dot(collision.transform.position - transform.position, normal) > 0)
+        {
+            Block();
         }
     }
 
-    public void OnTriggerExit2D(Collider2D collision)
+    public void OnCollisionExit2D(Collision2D collision)
     {
-        if (!passables.Contains(collision.gameObject) || !active) return;
+        // If passable leaves trigger
+        if (passables.Contains(collision.gameObject)) Release();
+    }
 
+    private void Block()
+    {
+        // Make wall solid
         GetComponent<BoxCollider2D>().isTrigger = false;
+    }
+    private void Release()
+    {
+        // Make wall passable
+        GetComponent<BoxCollider2D>().isTrigger = true;
     }
 
     public void OnValidate()

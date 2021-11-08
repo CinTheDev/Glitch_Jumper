@@ -1,8 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : Entity
 {
     public Rigidbody2D rb;
     public float movementSpeed;
@@ -10,11 +10,27 @@ public class PlayerMovement : MonoBehaviour
     public float dashForce;
     public bool isActive = true;
     public bool isDashing = false;
+    public bool respawn = false;
 
     Vector2 move;
     bool canDash = true;
     int xdirection = 1;//-1 = left, 1 = right
     int ydirection = 1;//-1 = down, 1 = up
+    [HideInInspector]
+    public Animator animator;
+
+    [Header("Deactivate Mechanics")]
+    public bool deactJump = false;
+    public bool deactDash = false;
+    public enum DeactMove
+    {
+        not,
+        both,
+        left,
+        right,
+    }
+    public DeactMove deactmove;
+
     
     enum Direction
     {
@@ -23,8 +39,13 @@ public class PlayerMovement : MonoBehaviour
     }
     Direction direction;
 
+    public void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
     void Start()
     {
+        transform.position = GetComponent<RespawnPlayer>().respawnpoint;
         Time.timeScale = 1f;
         rb = GetComponent<Rigidbody2D>();
     }
@@ -36,7 +57,42 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
         // Movement left/right
-        move = new Vector2(Input.GetAxisRaw("Horizontal")* movementSpeed, rb.velocity.y);
+        move = new Vector2(Input.GetAxisRaw("Horizontal") * movementSpeed, rb.velocity.y);
+        //Bugs
+        if (deactDash == true)
+        {
+            canDash = false;
+        }
+        switch (deactmove)
+        {
+            case DeactMove.not:
+                break;
+
+            case DeactMove.both:
+                move = new Vector2(0,rb.velocity.y);
+                break;
+
+            case DeactMove.left:
+                if(move.x < 0)
+                {
+                    move = new Vector2(0, rb.velocity.y);
+                }
+                else
+                {
+                    //NOTHING
+                }
+                break;
+            case DeactMove.right:
+                if (move.x > 0)
+                {
+                    move = new Vector2(0, rb.velocity.y);
+                }
+                else
+                {
+                    //NOTHING
+                }
+                break;
+        }
         // Deactivate movement while dashing
         if (!isDashing)
         {
@@ -57,11 +113,11 @@ public class PlayerMovement : MonoBehaviour
             
         }
 
-        // If y velocity is 0...
-        if (Mathf.Abs(rb.velocity.y) < 0.0001f && !isDashing)
+        //if the collider of the second object detects an object
+        if (isGrounded() && !isDashing)
         {
             // ...and jump button is pressed...
-            if (Input.GetButtonDown("Jump"))
+            if (Input.GetButtonDown("Jump") && deactJump== false)
             {
                 // ...jump!
                 float vel = Mathf.Sqrt(2 * rb.gravityScale * 9.81f * jumpHeight);
@@ -75,6 +131,7 @@ public class PlayerMovement : MonoBehaviour
         {
             xdirection = (int)Mathf.Sign(Input.GetAxis("Horizontal"));
             direction = Direction.xdirection;
+            animator.SetInteger("direction", xdirection);
         }
         if (Input.GetAxis("Vertical") != 0)
         {
@@ -103,18 +160,22 @@ public class PlayerMovement : MonoBehaviour
     private IEnumerator Dash()
     {
         isDashing = true;
+        animator.SetBool("isDashing", true);
         yield return new WaitForSeconds(0.2f);
         rb.velocity = new Vector2(0, 0.0002f);
         isDashing = false;
+        animator.SetBool("isDashing", false);
         canDash = false;
     }
 
-    public void Kill()
+    public override void Die(DieCause cause)
     {
         isActive = false;
+        animator.SetBool("Death", true);
         PhysicsMaterial2D mat = new PhysicsMaterial2D(GetComponent<Rigidbody2D>().sharedMaterial.name);
         mat.friction = 0.4f;
         GetComponent<Rigidbody2D>().sharedMaterial = mat;
+        respawn = true;
     }
 
     public IEnumerator Sleep(float s)
@@ -123,5 +184,10 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = Vector2.zero;
         yield return new WaitForSeconds(s);
         isActive = true;
+    }
+
+    private bool isGrounded()
+    {
+        return transform.Find("GroundCheck").GetComponent<GroundCheck>().isGrounded;
     }
 }
