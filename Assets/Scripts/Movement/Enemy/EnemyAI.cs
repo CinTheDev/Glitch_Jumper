@@ -8,6 +8,8 @@ public class EnemyAI : Entity
     public float stiffness;
     public float punchForce;
     public float punchForce2;
+    [HideInInspector]
+    public Animator animator;
     public enum Mode
     {
         Stationary,
@@ -18,17 +20,17 @@ public class EnemyAI : Entity
     public Mode mode;
 
     private Rigidbody2D rb;
-    private Animator animator;
     private GameObject player;
     private Vector3 home;
-    private enum AIState
+    [HideInInspector]
+    public enum AIState
     {
         Idle,
         Follow,
         Stop,
     }
-
-    private AIState state;
+    [HideInInspector]
+    public AIState state;
 
     // Unity's Mathf.Sign() returns 1 when input is 0, that is not how I want it.
     private int RealSign(float val)

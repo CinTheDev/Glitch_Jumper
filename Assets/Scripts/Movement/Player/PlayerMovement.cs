@@ -10,14 +10,13 @@ public class PlayerMovement : Entity
     public float dashForce;
     public bool isActive = true;
     public bool isDashing = false;
-    public bool respawn = false;
 
-    Vector2 move;
-    bool canDash = true;
-    int xdirection = 1;//-1 = left, 1 = right
-    int ydirection = 1;//-1 = down, 1 = up
-    [HideInInspector]
-    public Animator animator;
+    private Vector2 move;
+    private int ydirection = 1;//-1 = down, 1 = up
+    private Animator animator;
+    private bool canDash = true;
+    private int xdirection = 1;//-1 = left, 1 = right
+    private PhysicsMaterial2D mat;
 
     [Header("Deactivate Mechanics")]
     public bool deactJump = false;
@@ -31,23 +30,29 @@ public class PlayerMovement : Entity
     }
     public DeactMove deactmove;
 
-    
-    enum Direction
+    [HideInInspector]
+    public enum Direction
     {
         xdirection,
         ydirection
     }
-    Direction direction;
+    [HideInInspector]
+    public Direction direction;
 
     public void Awake()
     {
+        transform.position = new Vector2(-9, -8.5f);
         animator = GetComponent<Animator>();
     }
     void Start()
     {
-        transform.position = GetComponent<RespawnPlayer>().respawnpoint;
         Time.timeScale = 1f;
         rb = GetComponent<Rigidbody2D>();
+        mat = new PhysicsMaterial2D(GetComponent<Rigidbody2D>().sharedMaterial.name);
+        if (SceneManager.GetActiveScene().buildIndex != 1)
+        {
+            GameObject.Find("RespawnSystem").GetComponent<RespawnSystem>().StartPlayer();
+        } 
     }
 
     void Update()
@@ -172,10 +177,9 @@ public class PlayerMovement : Entity
     {
         isActive = false;
         animator.SetBool("Death", true);
-        PhysicsMaterial2D mat = new PhysicsMaterial2D(GetComponent<Rigidbody2D>().sharedMaterial.name);
         mat.friction = 0.4f;
         GetComponent<Rigidbody2D>().sharedMaterial = mat;
-        respawn = true;
+        StartCoroutine(GameObject.Find("RespawnSystem").GetComponent<RespawnSystem>().Reload());
     }
 
     public IEnumerator Sleep(float s)
@@ -185,7 +189,6 @@ public class PlayerMovement : Entity
         yield return new WaitForSeconds(s);
         isActive = true;
     }
-
     private bool isGrounded()
     {
         return transform.Find("GroundCheck").GetComponent<GroundCheck>().isGrounded;

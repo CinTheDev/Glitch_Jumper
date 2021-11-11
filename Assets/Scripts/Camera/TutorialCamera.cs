@@ -9,7 +9,7 @@ public class TutorialCamera : MonoBehaviour
 
     private Camera cam;
 
-    public void Start()
+    public void Awake()
     {
         cam = GetComponent<Camera>();
     }
@@ -27,5 +27,11 @@ public class TutorialCamera : MonoBehaviour
     public void OnValidate()
     {
         index = Mathf.Clamp(index, 0, cameraInfo.Length - 1);
+    }
+
+    public void SetPosition()
+    {
+        transform.position = new Vector3(cameraInfo[index].x, cameraInfo[index].y, transform.position.z);
+        cam.orthographicSize = cameraInfo[index].z;
     }
 }

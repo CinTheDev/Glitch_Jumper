@@ -5,14 +5,13 @@ using UnityEngine;
 public class Respawn : MonoBehaviour
 {
     private GameObject player;
-    private RespawnPlayer respawnplayer;
+    public GameObject respawn;
     public int index;
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("Player");
-        respawnplayer = player.GetComponent<RespawnPlayer>();
-        //respawnplayer.Reset();
+        respawn = GameObject.Find("RespawnSystem");
     }
 
     // Update is called once per frame
@@ -24,7 +23,7 @@ public class Respawn : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject != player) return;
-        player.GetComponent<RespawnPlayer>().respawnpoint = transform.position;
-        player.GetComponent<RespawnPlayer>().indexrespawnpoint = index;
+        respawn.transform.position = transform.position;
+        respawn.GetComponent<RespawnSystem>().indexrespawnpoint = index;
     }
 }
