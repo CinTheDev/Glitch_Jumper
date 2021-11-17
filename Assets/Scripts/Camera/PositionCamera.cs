@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TutorialCamera : MonoBehaviour
+public class PositionCamera : MonoBehaviour
 {
     [Header("X and Y are position, Z is scale")]
     public Vector3[] cameraInfo;

@@ -11,20 +11,26 @@ public class TriggerGlitch : MonoBehaviour
     }
     public Mode mode;
 
+    private bool triggerStay = false;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (mode == Mode.Constant)
             glTex.Glitch(Mathf.RoundToInt(GetComponent<BoxCollider2D>().size.x), Mathf.RoundToInt(GetComponent<BoxCollider2D>().size.y));
-    }
 
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (mode == Mode.OnTouch)
-            glTex.Glitch(Mathf.RoundToInt(GetComponent<BoxCollider2D>().size.x), Mathf.RoundToInt(GetComponent<BoxCollider2D>().size.y));
+        triggerStay = true;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (mode == Mode.OnTouch) glTex.GetSpriteRenderer().sprite = null;
+
+        triggerStay = false;
+    }
+
+    private void Update()
+    {
+        if (mode == Mode.OnTouch && triggerStay)
+            glTex.Glitch(Mathf.RoundToInt(GetComponent<BoxCollider2D>().size.x), Mathf.RoundToInt(GetComponent<BoxCollider2D>().size.y));
     }
 }

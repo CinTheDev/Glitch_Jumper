@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Movement\Enemy\Editor\DrawTest.cs" />
     <Compile Include="Assets\Scripts\Environment\Terminal\Editor\TerminalInspector.cs" />
+    <Compile Include="Assets\Scripts\Editor\JumppadInspector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

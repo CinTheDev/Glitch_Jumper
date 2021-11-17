@@ -27,6 +27,12 @@ public class BrokenPlatform : MonoBehaviour
         if (stability == 0)
         {
             GetComponent<BoxCollider2D>().enabled = false;
+
+            Jumppad pad = GetComponentInChildren<Jumppad>();
+            if (pad)
+            {
+                pad.Fall();
+            }
         }
     }
 }

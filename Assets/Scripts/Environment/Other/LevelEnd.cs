@@ -14,6 +14,7 @@ public class LevelEnd : MonoBehaviour
     {
         if (collision.gameObject == player)
         {
+            Destroy(GameObject.FindGameObjectWithTag("Respawn"));
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }

@@ -1,21 +1,38 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public class RespawnSystem : MonoBehaviour
 {
     public int indexrespawnpoint = 1;
+    public int indexend = 0;
+    public GameObject prefab;
     public static RespawnSystem instance;
     public GameObject respawnsystem;
+    public Vector2 reset = new Vector2(-9, -8.5f);
+    public bool test = false;
     private GameObject player;
-    private PlayerMovement playermovement;
-    private TutorialCamera cam;
+    private PositionCamera cam;
     // Start is called before the first frame update
     void Awake()
     {
-        transform.position = new Vector2(-9, -8.5f);
+        if (!test)
+        {
+            indexrespawnpoint = 0;
+            switch (SceneManager.GetActiveScene().buildIndex)
+            {
+                case 1:
+                    Destroy(gameObject);
+                    break;
+                case 2:
+                    reset = new Vector2(-9, -8.5f);
+                    break;
+                case 3:
+                    reset = new Vector2(-7, -2.5f);
+                    break;
+            }
+        }
+        transform.position = reset;
         player = GameObject.FindGameObjectWithTag("Player");
-        playermovement = GameObject.Find("Player").GetComponent<PlayerMovement>();
     }
     private void Start()
     {
@@ -31,9 +48,20 @@ public class RespawnSystem : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
+        switch (SceneManager.GetActiveScene().buildIndex)
+        {
+            case 1:
+                Destroy(gameObject);
+                break;
+            case 2:
+                reset = new Vector2(-9, -8.5f);
+                break;
+            case 3:
+                reset = new Vector2(-7, -2.5f);
+                break;
+        }
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -49,15 +77,10 @@ public class RespawnSystem : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         player.transform.position = transform.position;
-        cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<TutorialCamera>();
+        cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<PositionCamera>();
         cam.index = indexrespawnpoint;
         cam.SetPosition();
     }
 
-    public void Reset()
-    {
-        transform.position = new Vector2(-9, -8.5f);
-        indexrespawnpoint = 0;
-    }
 }
     

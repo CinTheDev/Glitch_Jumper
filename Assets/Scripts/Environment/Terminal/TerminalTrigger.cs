@@ -1,9 +1,11 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 public class TerminalTrigger : MonoBehaviour
 {
     public Terminal terminal;
+    public GameObject[] triggerObjects;
     public enum Mode
     {
         Type,
@@ -11,6 +13,7 @@ public class TerminalTrigger : MonoBehaviour
         TypeMultiple,
     }
     public Mode mode;
+    public bool clearConsole;
 
     [HideInInspector]
     [TextArea(0, 10)]
@@ -31,7 +34,7 @@ public class TerminalTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject != player) return;
+        if (!triggerObjects.Contains(collision.gameObject)) return;
 
         switch (mode)
         {
@@ -51,7 +54,7 @@ public class TerminalTrigger : MonoBehaviour
 
     private void Type()
     {
-        StartCoroutine(terminal.Type(text, time));
+        StartCoroutine(terminal.Type(text, time, clearConsole));
     }
 
     private bool typed = false;
@@ -59,7 +62,7 @@ public class TerminalTrigger : MonoBehaviour
     {
         if (!typed)
         {
-            StartCoroutine(terminal.Type(text, time));
+            StartCoroutine(terminal.Type(text, time, clearConsole));
             typed = true;
         }
     }
@@ -67,6 +70,15 @@ public class TerminalTrigger : MonoBehaviour
     private void TypeMultiple()
     {
         if (textQueue.Count > 0)
-            StartCoroutine(terminal.Type((string)textQueue.Dequeue(), time));
+        {
+            string text = (string)textQueue.Dequeue();
+            bool c = false;
+            if (text.Contains("\\c"))
+            {
+                c = true;
+                text = text.Remove(0, 2);
+            }
+            StartCoroutine(terminal.Type(text, time, c || clearConsole));
+        }
     }
 }

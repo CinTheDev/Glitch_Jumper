@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class EnemyAI : Entity
 {
@@ -18,6 +19,13 @@ public class EnemyAI : Entity
     [Tooltip("Stationary makes the enemy stationary and follow the player in the trigger,\n" +
             "Walk makes the enemy walk back and forth in the trigger.")]
     public Mode mode;
+
+    public enum Health
+    {
+        Regular,
+        Protected,
+    }
+    public Health health;
 
     private Rigidbody2D rb;
     private GameObject player;
@@ -52,6 +60,8 @@ public class EnemyAI : Entity
 
         state = AIState.Idle;
         home = transform.position;
+
+        animator.SetBool("Protected", health == Health.Protected);
     }
 
     // Update is called once per frame
@@ -120,11 +130,11 @@ public class EnemyAI : Entity
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
+        if (state == AIState.Stop) return;
+
         // Kill player
         if (collision.gameObject == player && !player.GetComponent<PlayerMovement>().isDashing)
         {
-            if (state == AIState.Stop) return;
-
             // Mark player as dead
             state = AIState.Stop;
             player.GetComponent<PlayerMovement>().Die(DieCause.Enemy);
@@ -142,7 +152,22 @@ public class EnemyAI : Entity
         // Kill enemy
         else if (collision.gameObject == player && player.GetComponent<PlayerMovement>().isDashing)
         {
-            Die(DieCause.Player);
+            if (health == Health.Regular)
+                Die(DieCause.Player);
+            else
+            {
+                // Mark enemy as paralyzed
+                state = AIState.Stop;
+
+                // Apply knockback on player
+                Rigidbody2D plRb = player.GetComponent<Rigidbody2D>();
+                plRb.velocity = new Vector2(plRb.velocity.x * -.5f, plRb.velocity.y) * Mathf.Sqrt(plRb.gravityScale);
+
+                // Apply knockback on Enemy
+                rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * punchForce2, rb.velocity.y);
+
+                StartCoroutine(Knockback(1));
+            }
         }
     }
 
@@ -166,6 +191,12 @@ public class EnemyAI : Entity
         animator.SetBool("Dead", true);
 
         //Debug.Log("Got hit by player");
+    }
+
+    private IEnumerator Knockback(float time)
+    {
+        yield return new WaitForSecondsRealtime(time);
+        state = AIState.Idle;
     }
 
     private void OnValidate()

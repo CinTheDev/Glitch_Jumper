@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Linq;
 
-public class MovingPlatform : MonoBehaviour
+public class MovingPlatform : ActivationClass
 {
     public GameObject[] transportables;
     public Vector2 Motion;
@@ -10,6 +10,16 @@ public class MovingPlatform : MonoBehaviour
     private Vector3 initialPos;
     private Vector3 lastPos;
     private float time;
+    private bool active = true;
+
+    protected override void Act()
+    {
+        active = true;
+    }
+    protected override void Deact()
+    {
+        active = false;
+    }
 
     public void Start()
     {
@@ -18,6 +28,8 @@ public class MovingPlatform : MonoBehaviour
 
     public void Update()
     {
+        if (!active) return;
+
         time += Time.deltaTime;
         float timeSin = 0.5f * Mathf.Sin(time * timeScale) + 0.5f;
 
@@ -28,7 +40,7 @@ public class MovingPlatform : MonoBehaviour
 
     public void OnCollisionStay2D(Collision2D collision)
     {
-        if (transportables.Contains(collision.gameObject))
+        if (transportables.Contains(collision.gameObject) && active)
         {
             float speed = transform.position.x - lastPos.x;
             collision.gameObject.transform.Translate(new Vector3(speed, 0));

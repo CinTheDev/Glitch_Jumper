@@ -16,5 +16,5 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     float b = rand(float2(id.x / Seed, id.y * Seed));
     float a = rand(float2(id.x * Seed, id.y + Seed));
 
-    Result[id.xy] = float4(r, g, b, a);
+    Result[id.xy] = float4(r, g, b, a * 0.5);
 }

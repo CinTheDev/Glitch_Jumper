@@ -45,7 +45,10 @@ public class PauseMenu : MonoBehaviour
 
     public void Menu()
     {
-        GameObject.FindGameObjectWithTag("Respawn").GetComponent<RespawnSystem>().Reset();
+        if (SceneManager.GetActiveScene().buildIndex > 1)
+        {
+            Destroy(GameObject.FindGameObjectWithTag("Respawn"));
+        }
         SceneManager.LoadScene(0);
     }
 

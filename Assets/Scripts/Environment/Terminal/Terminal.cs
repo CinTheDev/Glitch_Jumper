@@ -16,7 +16,9 @@ public class Terminal : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(Cursor());
+        //StartCoroutine(Cursor());
+
+        text.text = "> ";
     }
 
     private void Update()
@@ -25,14 +27,14 @@ public class Terminal : MonoBehaviour
         text.rectTransform.sizeDelta = transform.localScale;
     }
 
-    public IEnumerator Type(string text, float timeBetweenSteps)
+    public IEnumerator Type(string text, float timeBetweenSteps, bool clear)
     {
-        StartCoroutine(Type(text.ToCharArray(), timeBetweenSteps));
+        StartCoroutine(Type(text.ToCharArray(), timeBetweenSteps, clear));
         yield return null;
     }
 
     private bool textLock = false;
-    public IEnumerator Type(char[] letters, float timeBetweenSteps)
+    public IEnumerator Type(char[] letters, float timeBetweenSteps, bool clear)
     {
         // If another thread is writing to the text
         while (textLock) yield return new WaitForEndOfFrame();
@@ -40,14 +42,16 @@ public class Terminal : MonoBehaviour
         // Mark the text as locked
         textLock = true;
 
-        text.text = "> ";
+        if (clear) text.text = "> ";
+
         for (int i = 0; i < letters.Length; i++)
         {
             // Add letters piece by piece
             text.text += letters[i];
             yield return new WaitForSeconds(timeBetweenSteps);
         }
-        
+
+        text.text += "\n\n> ";
 
         // Free the text from locked state
         textLock = false;
