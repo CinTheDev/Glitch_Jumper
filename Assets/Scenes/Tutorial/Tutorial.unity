@@ -175,13 +175,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1286125032, guid: e2ee942d59c778f4cb6280f08c80aba9, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4761900824317168042, guid: e2ee942d59c778f4cb6280f08c80aba9, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4761900824317168042, guid: e2ee942d59c778f4cb6280f08c80aba9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -227,8 +223,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1926484325, guid: e2ee942d59c778f4cb6280f08c80aba9, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e2ee942d59c778f4cb6280f08c80aba9, type: 3}
 --- !u!1001 &37588049
 PrefabInstance:
@@ -15920,6 +15915,10 @@ PrefabInstance:
     - target: {fileID: 3697677071689480989, guid: 224873341e1a76445906701aca15e9c8, type: 3}
       propertyPath: m_Name
       value: One Way Door
+      objectReference: {fileID: 0}
+    - target: {fileID: 3697677071689480989, guid: 224873341e1a76445906701aca15e9c8, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3697677071689480990, guid: 224873341e1a76445906701aca15e9c8, type: 3}
       propertyPath: m_RootOrder

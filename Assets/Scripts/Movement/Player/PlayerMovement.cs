@@ -21,8 +21,6 @@ public class PlayerMovement : Entity
     private int xdirection = 1;//-1 = left, 1 = right
     private PhysicsMaterial2D mat;
     private bool flingEnabled = false;
-    [SerializeField]
-    public LayerMask brokenplatform;
 
     [Header("Deactivate Mechanics")]
     public bool deactJump = false;
@@ -217,16 +215,6 @@ public class PlayerMovement : Entity
         bool r2 = Physics2D.Raycast(p2, Vector2.right, right);
         bool r3 = Physics2D.Raycast(p1, Vector2.down, down);
         bool r4 = Physics2D.Raycast(p4, Vector2.down, down);
-
-        RaycastHit2D r1hit = Physics2D.Raycast(p1, Vector2.right, right, brokenplatform);
-        RaycastHit2D r2hit = Physics2D.Raycast(p2, Vector2.right, right, brokenplatform);
-        RaycastHit2D r3hit = Physics2D.Raycast(p1, Vector2.down, down, brokenplatform);
-        RaycastHit2D r4hit = Physics2D.Raycast(p4, Vector2.down, down, brokenplatform);
-
-        if (r1hit.collider != null) return false;
-        if (r2hit.collider != null) return false;
-        if (r3hit.collider != null) return false;
-        if (r4hit.collider != null) return false;
 
         Debug.DrawLine(p1, p2);
         Debug.DrawLine(p2, p3);

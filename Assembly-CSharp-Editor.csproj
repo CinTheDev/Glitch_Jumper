@@ -53,9 +53,10 @@
     <UnityVersion>2020.3.21f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Editor\JumppadInspector.cs" />
     <Compile Include="Assets\Scripts\Movement\Enemy\Editor\DrawTest.cs" />
     <Compile Include="Assets\Scripts\Environment\Terminal\Editor\TerminalInspector.cs" />
-    <Compile Include="Assets\Scripts\Editor\JumppadInspector.cs" />
+    <Compile Include="Assets\Scripts\Editor\OWDInspector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

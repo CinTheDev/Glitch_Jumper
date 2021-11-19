@@ -152,6 +152,12 @@ MonoBehaviour:
   isActive: 1
   isDashing: 0
   fling: 0
+  nocollisionnojump:
+    serializedVersion: 2
+    m_Bits: 128
+  nojump:
+    serializedVersion: 2
+    m_Bits: 256
   deactJump: 0
   deactDash: 0
   deactmove: 0

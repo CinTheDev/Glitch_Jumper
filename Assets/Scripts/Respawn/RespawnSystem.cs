@@ -29,6 +29,9 @@ public class RespawnSystem : MonoBehaviour
                 case 3:
                     reset = new Vector2(-7, -2.5f);
                     break;
+                case 4:
+                    reset = new Vector2(-10, -0.5f);
+                    break;
             }
         }
         transform.position = reset;

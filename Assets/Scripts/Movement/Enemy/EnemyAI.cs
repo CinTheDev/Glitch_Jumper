@@ -64,7 +64,6 @@ public class EnemyAI : Entity
         animator.SetBool("Protected", health == Health.Protected);
     }
 
-    // Update is called once per frame
     public void FixedUpdate()
     {
         if (state == AIState.Stop) return;
@@ -79,6 +78,12 @@ public class EnemyAI : Entity
                 Walk();
                 break;
         }
+
+        // Raycast
+        bool left = Physics2D.Raycast(transform.position + new Vector3(-0.6f, -0.4f), new Vector3(-0.1f, 0.8f), 1);
+        bool right = Physics2D.Raycast(transform.position + new Vector3(0.6f, -0.4f), new Vector3(0.1f, 0.8f), 1);
+
+        if (left || right) direction *= -1;
     }
 
     private void Stationary()

@@ -4,17 +4,19 @@ using UnityEditor;
 [CustomEditor(typeof(EnemyAI))]
 class DrawLine : Editor
 {
-    private void OnSceneGUI()
+    public void OnSceneGUI()
     {
         EnemyAI enemy = target as EnemyAI;
         if (enemy == null) return;
 
         Handles.color = Color.green;
 
+#pragma warning disable IDE0090 // "new(...)" verwenden
         Vector2 p1 = new Vector2(-enemy.relativeTriggerSize.x, enemy.relativeTriggerSize.y);
         Vector2 p2 = new Vector2(enemy.relativeTriggerSize.x, enemy.relativeTriggerSize.y);
         Vector2 p3 = new Vector2(enemy.relativeTriggerSize.x, -enemy.relativeTriggerSize.y);
         Vector2 p4 = new Vector2(-enemy.relativeTriggerSize.x, -enemy.relativeTriggerSize.y);
+#pragma warning restore IDE0090 // "new(...)" verwenden
 
         Vector2 pos = enemy.transform.position;
         p1 += pos + enemy.relativeTriggerOffset;

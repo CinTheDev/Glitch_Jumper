@@ -14,20 +14,22 @@ public class GlitchTexture : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
     }
 
-    public void Glitch(int height, int width)
+    public void Glitch(int width, int height)
     {
-        height *= resolution;
         width *= resolution;
+        height *= resolution;
         // Shader
-        RenderTexture rTex = new RenderTexture(height, width, 32);
+        RenderTexture rTex = new RenderTexture(width, height, 32);
         rTex.enableRandomWrite = true;
         rTex.Create();
 
         computeShader.SetTexture(0, "Result", rTex);
         computeShader.SetInt("Seed", Random.Range(0, 256));
+        computeShader.SetInt("ResolutionY", height);
+        computeShader.SetInt("ResolutionX", width);
         computeShader.Dispatch(0, rTex.width, rTex.height, 1);
 
-        Texture2D texture = new Texture2D(height, width, TextureFormat.RGBA32, false);
+        Texture2D texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
         texture.filterMode = FilterMode.Point;
 
         // Render Texture apply

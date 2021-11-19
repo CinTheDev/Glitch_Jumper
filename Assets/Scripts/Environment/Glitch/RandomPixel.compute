@@ -4,6 +4,9 @@ RWTexture2D<float4> Result;
 
 int Seed;
 
+int ResolutionX;
+int ResolutionY;
+
 float rand(float2 co) {
     return(frac(sin(dot(co.xy, float2(12.9898, 78.233))) * 43758.5453)) * 1;
 }
@@ -16,5 +19,10 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     float b = rand(float2(id.x / Seed, id.y * Seed));
     float a = rand(float2(id.x * Seed, id.y + Seed));
 
-    Result[id.xy] = float4(r, g, b, a * 0.5);
+    float x = id.x / (float)ResolutionX;
+    float y = id.y / (float)ResolutionY;
+
+    float mult = 4 * ((0.5 - x) * (0.5 - x) + (0.5 - y) * (0.5 - y));
+
+    Result[id.xy] = float4(r, g, b, a * mult);
 }
