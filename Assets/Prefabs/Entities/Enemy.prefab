@@ -151,7 +151,10 @@ MonoBehaviour:
   stiffness: 0.1
   punchForce: 3
   punchForce2: 4
+  animator: {fileID: 0}
   mode: 0
+  health: 0
+  state: 0
   direction: 1
 --- !u!95 &1460605100054144478
 Animator:

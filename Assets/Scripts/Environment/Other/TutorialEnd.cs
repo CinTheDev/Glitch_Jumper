@@ -16,19 +16,22 @@ public class TutorialEnd : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject == player.gameObject)
-        {
-            StartCoroutine(player.GetComponent<PlayerMovement>().Sleep(1/4f));
-            player.position = nextPosition;
-            cam.index++;
-            CreateRespawn();
-        }
+        if (collision.gameObject == player.gameObject) NextLevel();
+    }
+
+    public void NextLevel()
+    {
+        StartCoroutine(player.GetComponent<PlayerMovement>().Sleep(1 / 4f));
+        player.position = nextPosition;
+        cam.index++;
+        CreateRespawn();
+        FindObjectOfType<AudioManager>().Play("Finish");
     }
 
     private void CreateRespawn()
     {
         GameObject r = Instantiate(respawn, nextPosition, Quaternion.identity);
-        GameObject.FindGameObjectWithTag("Respawn").GetComponent<RespawnSystem>().indexend++;
-        r.GetComponent<Respawn>().index = GameObject.FindGameObjectWithTag("Respawn").GetComponent<RespawnSystem>().indexend; 
+        GameObject.FindGameObjectWithTag("Respawn").GetComponent<RespawnSystem>().indexrespawnpoint++;
+        r.GetComponent<Respawn>().index = GameObject.FindGameObjectWithTag("Respawn").GetComponent<RespawnSystem>().indexrespawnpoint++; 
     }
 }

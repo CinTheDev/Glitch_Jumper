@@ -17,7 +17,8 @@ public class PlayerMovement : Entity
     private Vector2 move;
     private int ydirection = 1;//-1 = down, 1 = up
     private Animator animator;
-    private bool canDash = true;
+    [HideInInspector]
+    public bool canDash = true;
     private int xdirection = 1;//-1 = left, 1 = right
     private PhysicsMaterial2D mat;
     private bool flingEnabled = false;
@@ -176,6 +177,7 @@ public class PlayerMovement : Entity
     {
         isDashing = true;
         animator.SetBool("isDashing", true);
+        FindObjectOfType<AudioManager>().Play("Dash");
         yield return new WaitForSeconds(0.2f);
         rb.velocity = new Vector2(0, 0.0002f);
         isDashing = false;
@@ -189,7 +191,25 @@ public class PlayerMovement : Entity
         animator.SetBool("Death", true);
         mat.friction = 0.4f;
         GetComponent<Rigidbody2D>().sharedMaterial = mat;
-        StartCoroutine(GameObject.Find("RespawnSystem").GetComponent<RespawnSystem>().Reload());
+        try
+        {
+            StartCoroutine(GameObject.Find("RespawnSystem").GetComponent<RespawnSystem>().Reload());
+        }
+        catch
+        {
+            Debug.LogWarning("Error occured in Respawnsystem, add the Respawnsystem if you haven't already.");
+        }
+
+        switch (cause)
+        {
+            case DieCause.Enemy:
+                FindObjectOfType<AudioManager>().Play("Zap");
+                break;
+
+            case DieCause.Player:
+                // Play sound
+                break;
+        }
     }
 
     public IEnumerator Sleep(float s)

@@ -6,6 +6,7 @@ public class Terminal : MonoBehaviour
 {
     [Header("Please don't spam the trigger. This causes bugs.")]
     public float cursorTime;
+    public float punctuationTime;
 
     private TextMeshPro text;
 
@@ -49,6 +50,10 @@ public class Terminal : MonoBehaviour
             // Add letters piece by piece
             text.text += letters[i];
             yield return new WaitForSeconds(timeBetweenSteps);
+
+            // Make pause when punctuation
+            if (letters[i].Equals('.') || letters[i].Equals(',') || letters[i].Equals('!') || letters[i].Equals('?'))
+                yield return new WaitForSeconds(punctuationTime);
         }
 
         text.text += "\n\n> ";

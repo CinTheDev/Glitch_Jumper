@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.Audio;
@@ -7,6 +5,7 @@ using UnityEngine.Audio;
 public class AudioManager : MonoBehaviour
 {
     public Sound[] sounds;
+    public float pitchDiff;
     public AudioMixerGroup mixer;
     public static AudioManager instance;
     void Awake()
@@ -31,18 +30,31 @@ public class AudioManager : MonoBehaviour
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
             s.source.outputAudioMixerGroup = mixer;
+            s.source.playOnAwake = false;
         }
     }
     // method to call a sound
     public void Play(string name)
     {
+        
+
         Sound s = Array.Find(sounds, sound => sound.name == name);
         if (s == null)
         {
-            Debug.Log("The name of the sound in the script is not equal to the name of the sound in the inspector of the audio manager");
+            Debug.LogError("Name " + name + " does not match any sound.");
             return;
         }
         s.source.Play();
         //to call a sound: AudioManager.FindObjectOfType<AudioManager>().Play("Name of Sound");
+    }
+
+    public void UpdateSound()
+    {
+        foreach (Sound s in sounds)
+        {
+            s.source.volume = s.volume;
+            s.source.pitch = s.pitch;
+            s.source.loop = s.loop;
+        }
     }
 }

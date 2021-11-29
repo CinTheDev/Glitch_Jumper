@@ -14,13 +14,16 @@ float rand(float2 co) {
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
-    float r = rand(float2(id.x * Seed, id.y * Seed));
-    float g = rand(float2(id.y * Seed, id.x * Seed));
-    float b = rand(float2(id.x / Seed, id.y * Seed));
-    float a = rand(float2(id.x * Seed, id.y + Seed));
+    uint xid = id.x + 1;
+    uint yid = id.y + 1;
 
-    float x = id.x / (float)ResolutionX;
-    float y = id.y / (float)ResolutionY;
+    float r = rand(float2(xid * Seed, yid * Seed));
+    float g = rand(float2(yid * Seed, xid * Seed));
+    float b = rand(float2(xid / Seed, yid * Seed));
+    float a = rand(float2(xid * Seed, yid + Seed));
+
+    float x = xid / (float)ResolutionX;
+    float y = yid / (float)ResolutionY;
 
     float mult = 4 * ((0.5 - x) * (0.5 - x) + (0.5 - y) * (0.5 - y));
 

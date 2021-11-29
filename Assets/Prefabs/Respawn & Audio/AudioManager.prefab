@@ -43,5 +43,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 465ec583d938f0e45be96ac04c99917e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sounds: []
+  sounds:
+  - name: Door
+    clip: {fileID: 8300000, guid: 708b30335bb69cd48b81beb85c7bc05c, type: 3}
+    volume: 0.33333334
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Button_Activate
+    clip: {fileID: 8300000, guid: f822e979b9407894290cb889840e0b9e, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Button_Deactivate
+    clip: {fileID: 8300000, guid: 1aab805a50a34874f910bfec54175476, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Spike
+    clip: {fileID: 8300000, guid: 517fa8123e954704d82e91bc6248a429, type: 3}
+    volume: 0.25
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Broken
+    clip: {fileID: 8300000, guid: 1a18273d4c4ea8d4498248bdfe862973, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Zap
+    clip: {fileID: 8300000, guid: a7d1308031bab8c409c94ab59e5acea4, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Dash
+    clip: {fileID: 8300000, guid: a65ddecdcd8ec3e4bb833103cb17a6b9, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Splat
+    clip: {fileID: 8300000, guid: bc4521cf42fcb7b4ca03e9a0334e9b2e, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Finish
+    clip: {fileID: 8300000, guid: 390e1c6b541d4db49b7f776f1b97c406, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
   mixer: {fileID: 24300002, guid: 68f4ee9e72312af41aad881e6d4d04da, type: 2}

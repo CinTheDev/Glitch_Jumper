@@ -42,6 +42,7 @@ public class Button : MonoBehaviour
 
             animator.SetBool("Active", !spriteInverted);
             active = true;
+            FindObjectOfType<AudioManager>().Play("Button_Activate");
         }
     }
 
@@ -62,6 +63,7 @@ public class Button : MonoBehaviour
 
             animator.SetBool("Active", spriteInverted);
             active = false;
+            FindObjectOfType<AudioManager>().Play("Button_Deactivate");
         }
     }
 

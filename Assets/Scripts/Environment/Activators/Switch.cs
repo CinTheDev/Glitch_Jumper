@@ -46,6 +46,7 @@ public class Switch : MonoBehaviour
             {
                 a.Activate();
             }
+            FindObjectOfType<AudioManager>().Play("Button_Activate");
         }
         // If switch was set to not active
         else
@@ -56,6 +57,7 @@ public class Switch : MonoBehaviour
             {
                 a.Deactivate();
             }
+            FindObjectOfType<AudioManager>().Play("Button_Deactivate");
         }
     }
 }

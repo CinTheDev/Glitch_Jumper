@@ -4,7 +4,6 @@ using UnityEngine.SceneManagement;
 public class RespawnSystem : MonoBehaviour
 {
     public int indexrespawnpoint = 1;
-    public int indexend = 0;
     public GameObject prefab;
     public static RespawnSystem instance;
     public GameObject respawnsystem;
@@ -30,7 +29,10 @@ public class RespawnSystem : MonoBehaviour
                     reset = new Vector2(-7, -2.5f);
                     break;
                 case 4:
-                    reset = new Vector2(-10, -0.5f);
+                    reset = new Vector2(-5.5f, -3.5f);
+                    break;
+                case 5:
+                    reset = new Vector2(-10f, -2.5f);
                     break;
             }
         }

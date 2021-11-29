@@ -53,10 +53,12 @@
     <UnityVersion>2020.3.21f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Editor\OWDInspector.cs" />
     <Compile Include="Assets\Scripts\Editor\JumppadInspector.cs" />
     <Compile Include="Assets\Scripts\Movement\Enemy\Editor\DrawTest.cs" />
     <Compile Include="Assets\Scripts\Environment\Terminal\Editor\TerminalInspector.cs" />
-    <Compile Include="Assets\Scripts\Editor\OWDInspector.cs" />
+    <Compile Include="Assets\Scripts\Editor\EndEditor.cs" />
+    <Compile Include="Assets\Sounds\Editor\AudioManagerEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -34,7 +34,10 @@ public class MovingPlatform : ActivationClass
         float timeSin = 0.5f * Mathf.Sin(time * timeScale) + 0.5f;
 
         GetComponent<Rigidbody2D>().MovePosition(new Vector3(initialPos.x + timeSin * Motion.x, initialPos.y + timeSin * Motion.y));
+    }
 
+    private void LateUpdate()
+    {
         lastPos = transform.position;
     }
 
@@ -43,7 +46,15 @@ public class MovingPlatform : ActivationClass
         if (transportables.Contains(collision.gameObject) && active)
         {
             float speed = transform.position.x - lastPos.x;
-            collision.gameObject.transform.Translate(new Vector3(speed, 0));
+
+            if (!collision.gameObject.CompareTag("Player"))
+            {
+                collision.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(speed / Time.deltaTime, collision.gameObject.GetComponent<Rigidbody2D>().velocity.y);
+                //Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
+                //rb.MovePosition(new Vector2(speed, 0));
+            }
+            else
+                collision.gameObject.transform.Translate(new Vector3(speed, 0));
         }
     }
 }

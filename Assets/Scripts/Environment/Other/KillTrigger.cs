@@ -17,5 +17,16 @@ public class KillTrigger : MonoBehaviour
             // Kill object
             obj.Die(Entity.DieCause.KillTrigger);
         }
+
+        switch (mode)
+        {
+            case Mode.OutOfBounds:
+                FindObjectOfType<AudioManager>().Play("Splat");
+                break;
+
+            case Mode.Spike:
+                FindObjectOfType<AudioManager>().Play("Spike");
+                break;
+        }
     }
 }

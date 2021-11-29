@@ -28,8 +28,10 @@ public class OneWayDoor : ActivationClass
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!passables.Contains(collision.gameObject)) return;
+
         // If unpassable object or not active
-        if (!passables.Contains(collision.gameObject) || !active)
+        if (!active)
         {
             Block();
         }

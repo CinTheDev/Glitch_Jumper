@@ -26,7 +26,7 @@ public class TerminalTrigger : MonoBehaviour
 
     private GameObject player;
 
-    private void Start()
+    private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         textQueue = new Queue(textArray);
@@ -36,6 +36,11 @@ public class TerminalTrigger : MonoBehaviour
     {
         if (!triggerObjects.Contains(collision.gameObject)) return;
 
+        Trigger();
+    }
+
+    public void Trigger()
+    {
         switch (mode)
         {
             case Mode.Type:

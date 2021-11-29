@@ -27,6 +27,9 @@ public class EnemyAI : Entity
     }
     public Health health;
 
+    [HideInInspector]
+    public bool active = true;
+
     private Rigidbody2D rb;
     private GameObject player;
     private Vector3 home;
@@ -50,6 +53,7 @@ public class EnemyAI : Entity
     public void Awake()
     {
         animator = GetComponent<Animator>();
+        active = true;
     }
 
     // Start is called before the first frame update
@@ -66,6 +70,16 @@ public class EnemyAI : Entity
 
     public void FixedUpdate()
     {
+        if (!active)
+        {
+            rb.bodyType = RigidbodyType2D.Static;
+            return;
+        }
+        else
+        {
+            rb.bodyType = RigidbodyType2D.Dynamic;
+        }
+
         if (state == AIState.Stop) return;
 
         switch (mode)

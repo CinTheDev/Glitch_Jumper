@@ -23,6 +23,7 @@ public class BrokenPlatform : MonoBehaviour
 
         int state = Mathf.RoundToInt((5f / maxStability) * (maxStability - stability));
         animator.SetInteger("State", state);
+        FindObjectOfType<AudioManager>().Play("Broken");
 
         if (stability == 0)
         {

@@ -15,6 +15,7 @@ public class Door : ActivationClass
         //Debug.Log("Door opened");
         GetComponent<BoxCollider2D>().enabled = false;
         animator.SetBool("Open", !spriteInverted);
+        FindObjectOfType<AudioManager>().Play("Door");
     }
 
     protected override void Deact()
@@ -22,5 +23,6 @@ public class Door : ActivationClass
         //Debug.Log("Door closed");
         GetComponent<BoxCollider2D>().enabled = true;
         animator.SetBool("Open", spriteInverted);
+        FindObjectOfType<AudioManager>().Play("Door");
     }
 }
