@@ -44,9 +44,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sounds:
-  - name: Door
-    clip: {fileID: 8300000, guid: 708b30335bb69cd48b81beb85c7bc05c, type: 3}
-    volume: 0.33333334
+  - name: Jump
+    clip: {fileID: 8300000, guid: abf5d9046453e0242a10be10a32ea57a, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Dash
+    clip: {fileID: 8300000, guid: a65ddecdcd8ec3e4bb833103cb17a6b9, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Spike
+    clip: {fileID: 8300000, guid: 517fa8123e954704d82e91bc6248a429, type: 3}
+    volume: 0.25
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Splat
+    clip: {fileID: 8300000, guid: bc4521cf42fcb7b4ca03e9a0334e9b2e, type: 3}
+    volume: 0.75
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Zap
+    clip: {fileID: 8300000, guid: a7d1308031bab8c409c94ab59e5acea4, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: HitEnemy
+    clip: {fileID: 8300000, guid: 72e40fb1f6613054a8a6fc9193853a37, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: KillEnemy
+    clip: {fileID: 8300000, guid: 6acf04c1e7d52944ca2402b851b655df, type: 3}
+    volume: 0.5
     pitch: 1
     loop: 0
     source: {fileID: 0}
@@ -62,32 +98,20 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
-  - name: Spike
-    clip: {fileID: 8300000, guid: 517fa8123e954704d82e91bc6248a429, type: 3}
-    volume: 0.25
+  - name: Door
+    clip: {fileID: 8300000, guid: 708b30335bb69cd48b81beb85c7bc05c, type: 3}
+    volume: 0.33333334
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Jumppad
+    clip: {fileID: 8300000, guid: d43e3803dbd23674b8283f7e7f938f74, type: 3}
+    volume: 1
     pitch: 1
     loop: 0
     source: {fileID: 0}
   - name: Broken
     clip: {fileID: 8300000, guid: 1a18273d4c4ea8d4498248bdfe862973, type: 3}
-    volume: 0.5
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: Zap
-    clip: {fileID: 8300000, guid: a7d1308031bab8c409c94ab59e5acea4, type: 3}
-    volume: 0.5
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: Dash
-    clip: {fileID: 8300000, guid: a65ddecdcd8ec3e4bb833103cb17a6b9, type: 3}
-    volume: 0.5
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: Splat
-    clip: {fileID: 8300000, guid: bc4521cf42fcb7b4ca03e9a0334e9b2e, type: 3}
     volume: 0.5
     pitch: 1
     loop: 0
@@ -98,4 +122,23 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+  - name: FloorCollision
+    clip: {fileID: 8300000, guid: 74ca8247c3675be46af21c0a1bb9658e, type: 3}
+    volume: 0.3
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Glitch
+    clip: {fileID: 8300000, guid: 66ae05e1b0d39d844a42c39dd6b235e9, type: 3}
+    volume: 0.3
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Song
+    clip: {fileID: 8300000, guid: 050a80a54691aa248bd2a536ad6d4193, type: 3}
+    volume: 0.25
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  pitchDifference: 0.025
   mixer: {fileID: 24300002, guid: 68f4ee9e72312af41aad881e6d4d04da, type: 2}

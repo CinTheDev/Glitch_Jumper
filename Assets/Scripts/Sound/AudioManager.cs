@@ -5,9 +5,10 @@ using UnityEngine.Audio;
 public class AudioManager : MonoBehaviour
 {
     public Sound[] sounds;
-    public float pitchDiff;
+    public float pitchDifference;
     public AudioMixerGroup mixer;
     public static AudioManager instance;
+
     void Awake()
     {
         // prevent to AudioManagers from existing at the same time
@@ -31,21 +32,37 @@ public class AudioManager : MonoBehaviour
             s.source.loop = s.loop;
             s.source.outputAudioMixerGroup = mixer;
             s.source.playOnAwake = false;
+            s.source.rolloffMode = AudioRolloffMode.Linear;
         }
     }
+
+    private void Start()
+    {
+        PlayMusic();
+    }
+
     // method to call a sound
     public void Play(string name)
     {
-        
-
         Sound s = Array.Find(sounds, sound => sound.name == name);
         if (s == null)
         {
             Debug.LogError("Name " + name + " does not match any sound.");
             return;
         }
+        s.source.pitch = s.pitch + UnityEngine.Random.Range(-pitchDifference, pitchDifference);
         s.source.Play();
-        //to call a sound: AudioManager.FindObjectOfType<AudioManager>().Play("Name of Sound");
+    }
+
+    public void PlayMusic()
+    {
+        Sound music = Array.Find(sounds, sound => sound.name == "Song");
+        if (music == null)
+        {
+            Debug.LogError("Music not found, please check name of the song.");
+            return;
+        }
+        music.source.Play();
     }
 
     public void UpdateSound()

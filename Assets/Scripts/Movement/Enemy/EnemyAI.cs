@@ -30,6 +30,9 @@ public class EnemyAI : Entity
     [HideInInspector]
     public bool active = true;
 
+    private LayerMask playermask;
+    private LayerMask enemymask;
+    private LayerMask layerMask;
     private Rigidbody2D rb;
     private GameObject player;
     private Vector3 home;
@@ -54,6 +57,10 @@ public class EnemyAI : Entity
     {
         animator = GetComponent<Animator>();
         active = true;
+
+        playermask = LayerMask.GetMask("Player");
+        enemymask = LayerMask.GetMask("Enemy");
+        layerMask = ~(playermask.value | enemymask.value);
     }
 
     // Start is called before the first frame update
@@ -94,9 +101,16 @@ public class EnemyAI : Entity
         }
 
         // Raycast
-        bool left = Physics2D.Raycast(transform.position + new Vector3(-0.6f, -0.4f), new Vector3(-0.1f, 0.8f), 1);
-        bool right = Physics2D.Raycast(transform.position + new Vector3(0.6f, -0.4f), new Vector3(0.1f, 0.8f), 1);
-
+        /*bool leftplayer = Physics2D.Raycast(transform.position + new Vector3(-0.8f, -0.4f), new Vector3(-0.1f, 0.8f), 1, playermask);
+        bool rightplayer = Physics2D.Raycast(transform.position + new Vector3(0.8f, -0.4f), new Vector3(0.1f, 0.8f), 1, playermask);
+        if (leftplayer || rightplayer) return;
+        bool leftenemy = Physics2D.Raycast(transform.position + new Vector3(-0.8f, -0.4f), new Vector3(-0.1f, 0.8f), 1, enemymask);
+        bool rightenemy = Physics2D.Raycast(transform.position + new Vector3(0.8f, -0.4f), new Vector3(0.1f, 0.8f), 1, enemymask);
+        if (leftenemy || rightenemy) return;*/
+        bool left = Physics2D.Raycast(transform.position + new Vector3(-0.8f, -0.4f), new Vector3(-0.1f, 0.8f), 1, layerMask);
+        bool right = Physics2D.Raycast(transform.position + new Vector3(0.8f, -0.4f), new Vector3(0.1f, 0.8f), 1, layerMask);
+        Debug.DrawRay(transform.position + new Vector3(-0.8f, -0.4f), new Vector3(-0.1f, 0.8f));
+        Debug.DrawRay(transform.position + new Vector3(0.8f, -0.4f), new Vector3(0.1f, 0.8f));
         if (left || right) direction *= -1;
     }
 
@@ -186,6 +200,8 @@ public class EnemyAI : Entity
                 rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * punchForce2, rb.velocity.y);
 
                 StartCoroutine(Knockback(1));
+
+                FindObjectOfType<AudioManager>().Play("HitEnemy");
             }
         }
     }
@@ -205,6 +221,8 @@ public class EnemyAI : Entity
 
             // Apply knockback on Enemy
             rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * punchForce2, rb.velocity.y);
+
+            FindObjectOfType<AudioManager>().Play("KillEnemy");
         }
 
         animator.SetBool("Dead", true);

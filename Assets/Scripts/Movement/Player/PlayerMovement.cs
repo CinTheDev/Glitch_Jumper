@@ -16,12 +16,14 @@ public class PlayerMovement : Entity
 
     private Vector2 move;
     private int ydirection = 1;//-1 = down, 1 = up
-    private Animator animator;
     [HideInInspector]
     public bool canDash = true;
     private int xdirection = 1;//-1 = left, 1 = right
     private PhysicsMaterial2D mat;
     private bool flingEnabled = false;
+
+    private Animator animator;
+    private SpriteRenderer spriteRenderer;
 
     [Header("Deactivate Mechanics")]
     public bool deactJump = false;
@@ -47,6 +49,8 @@ public class PlayerMovement : Entity
     public void Awake()
     {
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
     }
     void Start()
     {
@@ -65,6 +69,9 @@ public class PlayerMovement : Entity
         {
             return;
         }
+
+        spriteRenderer.flipX = xdirection == -1;
+        animator.SetBool("IsJumping", !isGrounded());
 
         //Bugs
         if (deactDash == true)
@@ -134,7 +141,7 @@ public class PlayerMovement : Entity
         {
             xdirection = (int)Mathf.Sign(Input.GetAxis("Horizontal"));
             direction = Direction.xdirection;
-            animator.SetInteger("direction", xdirection);
+            animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
         }
         if (Input.GetAxis("Vertical") != 0)
         {
@@ -151,6 +158,7 @@ public class PlayerMovement : Entity
                 // ...jump!
                 float vel = Mathf.Sqrt(2 * rb.gravityScale * 9.81f * jumpHeight);
                 rb.velocity = new Vector2(rb.velocity.x, vel);
+                FindObjectOfType<AudioManager>().Play("Jump");
             }
             // Enable dash
             canDash = true;
@@ -223,7 +231,7 @@ public class PlayerMovement : Entity
     {
         float left = -0.499f;
         float right = 0.998f;
-        float up = -0.51f;
+        float up = -1.01f;
         float down = 0.1f;
 
         Vector2 p1 = transform.position + new Vector3(left, up);

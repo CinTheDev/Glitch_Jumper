@@ -45,6 +45,7 @@ public class Jumppad : ActivationClass
         float velY = Mathf.Sqrt(2 * rb.gravityScale * 9.81f * height.y);
         rb.velocity = new Vector2(height.x, velY);
         animator.SetTrigger("Jump");
+        FindObjectOfType<AudioManager>().Play("Jumppad");
 
         if (obj.GetComponent<PlayerMovement>() && height.x != 0)
         {
